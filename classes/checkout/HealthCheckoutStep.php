@@ -53,7 +53,11 @@ class HealthCheckoutStep extends AbstractCheckoutStep
      */
     public function restorePersistedData(array $data)
     {
-        $qcm = new Qcm($this->getCheckoutSession()->getCustomer()->id);
+        if($id_qcm = QCM::getQcmByCustomer($this->getCheckoutSession()->getCustomer()->id)) {
+            $qcm = new Qcm($id_qcm);
+        } else {
+            $qcm = new Qcm();
+        }
 
         if (array_key_exists('height', $data)) {
             $this->height = $qcm->height;
@@ -79,10 +83,16 @@ class HealthCheckoutStep extends AbstractCheckoutStep
     {
         if (isset($requestParameters['submitCustomStep'])) {
 
-            $qcm = new Qcm($this->getCheckoutSession()->getCustomer()->id);
-            $qcm->height = $requestParameters['height'];
-            $qcm->weight = $requestParameters['weight'];
-            $qcm->age = $requestParameters['age'];
+            if($id_qcm = QCM::getQcmByCustomer($this->getCheckoutSession()->getCustomer()->id)) {
+                $qcm = new Qcm($id_qcm);
+            } else {
+                $qcm = new Qcm();
+            }
+            
+            $qcm->id_customer = $this->getCheckoutSession()->getCustomer()->id;
+            $qcm->height = (int) $requestParameters['height'];
+            $qcm->weight = (int) $requestParameters['weight'];
+            $qcm->age = (int) $requestParameters['age'];
             $qcm->save();
 
             //to next step

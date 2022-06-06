@@ -35,11 +35,23 @@ class Qcm extends ObjectModel
      */
     public static $definition = [
         'table' => 'customer_health',
-        'primary' => 'id_customer',
+        'primary' => 'id_customer_health',
         'fields' => [
+            'id_customer' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
             'height' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
             'weight' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
             'age' => ['type' => self::TYPE_INT, 'validate' => 'isunsignedInt', 'required' => true],
         ],
     ];
+
+    public static function getQcmByCustomer($id_customer)
+    {
+
+        $query = new DbQuery();
+        $query->select('id_customer_health');
+        $query->from('customer_health');
+        $query->where('id_customer = ' . (int) $id_customer);
+
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);
+    }
 }

@@ -71,11 +71,12 @@ class QcmOrder extends Module
     {
         $return = Db::getInstance()->execute('
                 CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'customer_health` (
-                `id_customer` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `id_customer_health` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `id_customer` INT UNSIGNED NOT NULL,
                 `height` INT(10) UNSIGNED NOT NULL,
                 `weight` INT(10) UNSIGNED NOT NULL ,
                 `age` INT(10) UNSIGNED NOT NULL ,
-                PRIMARY KEY (`id_customer`)
+                PRIMARY KEY (`id_customer_health`)
             ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8 ;'
         );
         return $return;
